@@ -2,7 +2,20 @@
 
 # Parallel BCFtools Merge Script
 
-This script provides a mechanism for parallelized merging of VCF/BCF files using `bcftools` and the `parallel` command. It chunks the VCF files based on unique positions and merges them in parallel before finally concatenating them.
+## Overview
+
+This script provides a parallelized approach to merging VCF/BCF files using BCFtools. It's especially beneficial for merging large datasets, efficiently splitting the task across multiple cores and thereby significantly reducing the overall time required for merging.
+
+## Performance
+
+Traditional merging using BCFtools on large datasets, such as a 50k samples file derived from 50 files of 1k samples each, can be time-consuming. A direct merge might take **several days** for such datasets.
+
+![Comparison Chart](comparison_chart.png)
+
+
+By leveraging the parallel capabilities of this script, the merging process is expedited considerably. In test cases, the merging time was reduced to just **4 hours** for the aforementioned dataset, marking a substantial improvement.
+
+
 
 ## Features
 
