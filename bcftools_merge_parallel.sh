@@ -62,7 +62,7 @@ function parallel_bcftools_merge() {
     echo "threads: $PARALLEL_CORES"
 
     parallel --gnu --workdir ${current_dir} --env args -j ${PARALLEL_CORES} \
-    "bcftools merge -r {1} --regions-overlap 0 -Ou --threads 2 -l ${FILE_LIST} | bcftools annotate -x FORMAT -Ob --threads 2" ${output_prefix}".{1}.bcf.gz" ::: ${ranges}
+    "bcftools merge -r {1} --regions-overlap 0 -Ob --threads 2 -l ${FILE_LIST} -o" ${output_prefix}".{1}.bcf.gz" ::: ${ranges}
     
     local order=$(echo $ranges | tr ' ' '\n' | awk -v "prefix=${output_prefix}" '{ print prefix "." $0 ".bcf.gz" }' | sort -V )
     bcftools concat ${order} -n -o ${FINAL_FILE_MERGED} --threads ${PARALLEL_CORES}
