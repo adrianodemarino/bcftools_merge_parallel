@@ -5,6 +5,17 @@ function get_first_vcf() {
     cat ${1} | head -n 1
 }
 
+function ensure_vcf_indexed() {
+    local vcf_list=$1
+    local thread_count=$2
+    while IFS= read -r vcf_file; do
+        if [[ ! -f "${vcf_file}.csi" && ! -f "${vcf_file}.tbi" ]]; then
+            echo "Index not found for ${vcf_file}. Indexing..."
+            bcftools index ${vcf_file} --threads ${thread_count}
+        fi
+    done < "${vcf_list}"
+}
+
 # Extract unique positions from the VCF file and generate chunks of the given size.
 function get_ranges() {
     local vcf_file=$1
@@ -40,6 +51,7 @@ function get_ranges() {
 function parallel_bcftools_merge() {
     local find_vcf=$(get_first_vcf $FILE_LIST)
     echo "Calculate range on: $find_vcf"
+    ensure_vcf_indexed ${FILE_LIST} ${PARALLEL_CORES}
     local ranges=$(get_ranges ${find_vcf})
     local current_dir=$(dirname ${find_vcf})
     local hash_merge=$(echo "$@" | md5sum | cut -c 1-5)
