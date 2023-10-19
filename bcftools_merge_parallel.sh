@@ -53,7 +53,7 @@ function parallel_bcftools_merge() {
     echo "Calculate range on: $find_vcf"
     ensure_vcf_indexed ${FILE_LIST} ${PARALLEL_CORES}
     local ranges=$(get_ranges ${find_vcf})
-    local current_dir=$(dirname ${find_vcf})
+    local current_dir=$(pwd)
     local hash_merge=$(echo "$@" | md5sum | cut -c 1-5)
     local output_prefix="${current_dir}/parallel_merge.${hash_merge}"
 
@@ -61,7 +61,7 @@ function parallel_bcftools_merge() {
     echo "output_prefix: $output_prefix"
     echo "threads: $PARALLEL_CORES"
 
-    parallel --gnu --workdir ${current_dir} --env args -j ${PARALLEL_CORES} \
+    parallel --gnu --workdir ${current_dir} -j ${PARALLEL_CORES} \
     "bcftools merge -r {1} --regions-overlap 0 -Ob --threads 2 -l ${FILE_LIST} -o" ${output_prefix}".{1}.bcf.gz" ::: ${ranges}
     
     local order=$(echo $ranges | tr ' ' '\n' | awk -v "prefix=${output_prefix}" '{ print prefix "." $0 ".bcf.gz" }' | sort -V )
@@ -73,7 +73,7 @@ function parallel_bcftools_merge() {
 }
 
 # Defaults
-PARALLEL_CORES=10
+PARALLEL_CORES=30
 FINAL_FILE_MERGED="merged_output.bcf.gz"
 FILE_LIST=""
 
