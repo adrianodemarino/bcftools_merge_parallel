@@ -41,14 +41,14 @@ To use the script:
 
 ### Options
 
-- `-l`: Path to the list of VCF/BCF files to be merged. (e.g., `sample_to_merge`)
+- `-l`: Path to the list of VCF/BCF files to be merged. (e.g., `sample_to_merge.list` 1 file name per line )
 - `-t`: Number of threads/cores to be used for parallel processing. (Default: 10)
 - `-o`: Name of the final merged output BCF file. (Default: `merged_output.bcf.gz`)
 
 ### Example:
 
 ```
-./bcftools_merge_parallel.sh -l sample_to_merge -t 10 -o ciao.bcf.gz
+./bcftools_merge_parallel.sh -l sample_to_merge.list -t 10 -o test.bcf.gz
 ```
 
 ## Notes
