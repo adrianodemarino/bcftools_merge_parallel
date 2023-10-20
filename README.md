@@ -15,7 +15,9 @@ Traditional merging using BCFtools on large datasets, such as a 50k samples file
 
 By leveraging the parallel capabilities of this script, the merging process is expedited considerably. In test cases, the merging time was reduced to just **4 hours** for the aforementioned dataset, marking a substantial improvement.
 
+## Assumptions
 
+Please note that each file represents a single chromosome, and the same chromosome is shared across multiple files. This tool is designed for merging large imputation results that have been divided into multiple files.
 
 ## Features
 
